@@ -1,0 +1,9 @@
+MANIFEST.in
+NEWS.txt
+README.rst
+openmeta.py
+setup.py
+openmeta.egg-info/PKG-INFO
+openmeta.egg-info/SOURCES.txt
+openmeta.egg-info/dependency_links.txt
+openmeta.egg-info/top_level.txt

@@ -1,0 +1,17 @@
+News
+====
+
+0.1.1dev
+------
+
+*Release date: 16-March-2011*
+
+* update email to allow upload, and bump version accordingly
+
+
+0.1dev
+------
+
+*Release date: 16-March-2011*
+
+* I spin this package off https://bitbucket.org/howthebodyworks/possumpalace_kit/src/23e924ba53e8/_lib/citeulike/

@@ -1,0 +1,73 @@
+Metadata-Version: 1.0
+Name: openmeta
+Version: 0.1.1dev
+Summary: Trivial wrapper providing tidy python access to the openmeta command-line client to set OS X openmeta tags on files
+Home-page: https://bitbucket.org/howthebodyworks/openmeta/src
+Author: Dan MacKinlay
+Author-email: pypi@email.possumpalace.orgg
+License: BSD
+Description: pythonic file tagging
+        ==========================
+        
+        Simple-to-trivial wrapper for OpenMeta_. Rather than re-implementing OpenMeta
+        using, say, Bob Ippolito's excellent xattr_, I decided to do it by wrapping
+        the already-functional CLI binary, on advice from those more experienced than
+        myself who suggested that the pain in getting OpenMeta working as advertised
+        from the direct xattr business was great and terrible.
+        
+        Warning - this thing does rely on parsing the output of CLI apps, with the
+        flakiness and performance troubles that implies. However, it's working
+        reliably for me.
+        
+        Usage
+        -----
+            
+            >>> import openmeta
+            >>> open('./test.txt', 'w').close()
+            >>> openmeta.set_tags('./test.txt', ['foo', 'bar'])
+            >>> openmeta.get_meta('./test.txt')['tags']
+            ['foo', 'bar']
+            
+        TODO
+        -----
+        
+          * more graceful error message when the openmeta CLI binary is not installed
+          
+        
+        Credits
+        -------
+        
+        - OpenMeta_
+        - xattr_
+        
+        .. _OpenMeta: http://code.google.com/p/openmeta/
+        .. _xattr: http://undefined.org/python/#xattr
+        
+        
+        News
+        ====
+        
+        0.1.1dev
+        ------
+        
+        *Release date: 16-March-2011*
+        
+        * update email to allow upload, and bump version accordingly
+        
+        
+        0.1dev
+        ------
+        
+        *Release date: 16-March-2011*
+        
+        * I spin this package off https://bitbucket.org/howthebodyworks/possumpalace_kit/src/23e924ba53e8/_lib/citeulike/
+        
+Keywords: metadata
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Environment :: MacOS X
+Classifier: Topic :: System :: Filesystems
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: License :: OSI Approved :: BSD License
