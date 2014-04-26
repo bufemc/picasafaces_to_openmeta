@@ -8,6 +8,7 @@ import ConfigParser
 import fnmatch
 import re
 import time
+import datetime
 from lib.openmeta import openmeta
 
 """
@@ -21,14 +22,22 @@ contactsfile = HOME +\
     "/Library/Application Support/Google/Picasa3/contacts/contacts.xml"
 
 
+now = datetime.datetime.now().strftime('%Y_%m_%d %H.%M.%S')
+
 def timer(func):
     def wrapper(*arg):
         t1 = time.time()
         res = func(*arg)
         t2 = time.time()
-        print '%s took %0.3f ms' % (func.func_name, (t2-t1)*1000.0)
+        log('%s took %0.3f ms' % (func.func_name, (t2-t1)*1000.0))
         return res
     return wrapper
+
+
+def log(msg):
+    print msg
+    with open('output_%s.txt' % now, 'a') as f:
+        f.write(msg + '\n')
 
 
 def createNameList(contactsfile):
@@ -56,18 +65,19 @@ def writeNamesToFiles(imgs, path):
         tags = openmeta.get_meta(filepath).get('tags', [])
         if 'photos' not in tags:
             names.append('photos')
-        print "filepath", filepath
+        log("filepath %s" % filepath)
         if not check_existing_tags(tags, names):
             new_tags = list(set(tags + names))
-            print "current tags:", tags
-            print "new names:", names
-            print "tags will be:", new_tags
-            if not testing:
-                openmeta.set_tags(filepath, new_tags)
+            log("current tags: %s" % tags)
+            log("new names: %s" % names)
+            log("tags will be: %s" % new_tags)
+            # if not testing:
+            openmeta.set_tags(filepath, new_tags)
         else:
-            print "tags match. skipping..."
-        print "-" * 10
+            log("tags match. skipping...")
+        log("-" * 10)
     return
+
 
 @timer
 def main():
@@ -103,25 +113,25 @@ def main():
                             name = contactmap[face]
                             if face != "ffffffffffffffff":
                                 # we found a (proper) name, so add it to the dictionary
-                                print "Adding name '"+name+"' to file '"+item+"'"
+                                log("Adding name '"+name+"' to file '"+item+"'")
                                 imgs[item].append(name)
                             else:
                                 # No name attached to the face (aka unkown face in picasa)
                                 "Face not identified"
                         except:
                             # no name found for the face (not saved in the contacts.xml)
-                            print "No name found for this id"
+                            log("No name found for this id")
 
-                    # print imgs  # lets see what we found
+                    # log(imgs  # lets see what we found)
                     # here we should write the names to the images
                 except:
-                    print "No faces saved in this file ('"+item+"')"
+                    log("No faces saved in this file ('"+item+"')")
             try:
                 writeNamesToFiles(imgs, path)
             except Exception as err:
-                print "Error while saving!", err
+                log("Error while saving! %s" % err)
         else:
-            print "Please enter path to 'picasa.ini' as first argument"
+            log("Please enter path to 'picasa.ini' as first argument")
             sys.exit(0)
 
 
@@ -129,5 +139,6 @@ if __name__ == '__main__':
     testing = True
 
     src = "/Users/rjames/Dropbox/Pictures/My Photos"
+    #src = "/Users/rjames/Desktop/2014"
 
     main()
