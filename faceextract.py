@@ -9,7 +9,8 @@ import fnmatch
 import re
 import time
 import datetime
-from lib.openmeta import openmeta
+# from lib.openmeta import openmeta
+from lib import tag
 
 """
 
@@ -62,7 +63,7 @@ def writeNamesToFiles(imgs, path):
     directory = os.path.dirname(path)
     for filename, names in imgs.iteritems():
         filepath = os.path.join(directory, filename)
-        tags = openmeta.get_meta(filepath).get('tags', [])
+        tags = list(tag.get_tags(filepath))
         if 'photos' not in tags:
             names.append('photos')
         log("filepath %s" % filepath)
@@ -72,7 +73,7 @@ def writeNamesToFiles(imgs, path):
             log("new names: %s" % names)
             log("tags will be: %s" % new_tags)
             # if not testing:
-            openmeta.set_tags(filepath, new_tags)
+            tag.add_tags(filepath, new_tags)
         else:
             log("tags match. skipping...")
         log("-" * 10)
@@ -82,9 +83,10 @@ def writeNamesToFiles(imgs, path):
 @timer
 def main():
     matches = []
-    for root, dirnames, filenames in os.walk(src):
-        for filename in fnmatch.filter(filenames, '.picasa.ini'):
-            matches.append(os.path.join(root, filename))
+    for src in srcs:
+        for root, dirnames, filenames in os.walk(src):
+            for filename in fnmatch.filter(filenames, '.picasa.ini'):
+                matches.append(os.path.join(root, filename))
 
     for path in matches:
 
@@ -138,7 +140,9 @@ def main():
 if __name__ == '__main__':
     testing = True
 
-    src = "/Users/rjames/Dropbox/Pictures/My Photos"
-    #src = "/Users/rjames/Desktop/2014"
+    srcs = [
+        HOME + "/Dropbox/Pictures/My Photos",
+        HOME + "/Dropbox/Pictures/Scans of Negatives/Low Res JPGs",
+    ]
 
     main()
